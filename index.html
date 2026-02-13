@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Valentine</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #ffd6e8;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ---------- FIRST SCREEN ---------- */
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 38px;
+            margin-bottom: 50px;
+        }
+
+        .buttons {
+            position: relative;
+            width: 400px;
+            height: 100px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 22px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        #no {
+            left: 0;
+            background: #adb5bd;
+        }
+
+        #yes {
+            right: 0;
+            background: #ff4d6d;
+            color: white;
+        }
+
+        /* ---------- HEART BACKGROUND ---------- */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff6fae;
+            font-size: 24px;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(100vh); opacity: 1; }
+            to { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        /* ---------- SECOND SCREEN ---------- */
+        .love-screen {
+            display: none;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background: #ffd6e8;
+            position: relative;
+            z-index: 2;
+        }
+
+        .love-text {
+            font-size: 80px;
+            color: #d63384;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        .rain-heart {
+            position: absolute;
+            top: -50px;
+            color: #ff4d6d;
+            font-size: 30px;
+            animation: fall 5s linear infinite;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-50px); opacity: 1; }
+            to { transform: translateY(110vh); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="hearts" id="bgHearts"></div>
+
+<div class="container" id="startScreen">
+    <h1>Will you be my Valentine?</h1>
+
+    <div class="buttons">
+        <button id="no" onmouseover="moveNo()" onclick="moveNo()">NO</button>
+        <button id="yes" onclick="showLove()">YES</button>
+    </div>
+</div>
+
+<div class="love-screen" id="loveScreen">
+    <div class="love-text">I LOVE YOU</div>
+</div>
+
+<script>
+    /* Move NO button */
+    function moveNo() {
+        const no = document.getElementById("no");
+        const x = Math.random() * (window.innerWidth - 120);
+        const y = Math.random() * (window.innerHeight - 60);
+        no.style.left = x + "px";
+        no.style.top = y + "px";
+    }
+
+    /* Floating hearts on first screen */
+    function createBgHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 20 + "px";
+        document.getElementById("bgHearts").appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(createBgHeart, 300);
+
+    /* YES click */
+    function showLove() {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("bgHearts").style.display = "none";
+
+        const love = document.getElementById("loveScreen");
+        love.style.display = "flex";
+
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.className = "rain-heart";
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = Math.random() * 25 + 25 + "px";
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 5000);
+        }, 200);
+    }
+</script>
+
+</body>
+</html>
