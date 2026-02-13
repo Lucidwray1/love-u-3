@@ -98,17 +98,21 @@ button {
 }
 
 /* ---------- ROSES BACKGROUND ---------- */
-.roses {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-}
+// Add roses
+const rosesArray = [];
+for (let i = 0; i < 10; i++) {
+    const r = document.createElement("div");
+    r.className = "rose";
+    r.innerHTML = "🌹";
+    r.style.left = Math.random() * window.innerWidth + "px";
+    r.style.top = Math.random() * window.innerHeight + "px";
 
-.rose {
-    position: absolute;
-    font-size: 100px;
-    opacity: 0.3;
+    // Give each rose a random velocity
+    r.vx = (Math.random() - 0.5) * 0.5; // horizontal speed
+    r.vy = (Math.random() - 0.5) * 0.5; // vertical speed
+
+    document.getElementById("roses").appendChild(r);
+    rosesArray.push(r);
 }
 
 /* ---------- RAINING HEARTS ---------- */
@@ -191,5 +195,6 @@ function showLove() {
 
 </body>
 </html>
+
 
 
