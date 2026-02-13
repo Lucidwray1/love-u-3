@@ -10,10 +10,21 @@ body {
     height: 100vh;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    background-image: url("hearts-bg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #ffd6e8;
+}
+
+/* ---------- FLOATING BACKGROUND HEARTS ---------- */
+.bg-heart {
+    position: absolute;
+    font-size: 80px;
+    color: rgba(255, 77, 109, 0.5);
+    pointer-events: none;
+    animation: drift linear infinite;
+}
+
+@keyframes drift {
+    from { transform: translate(0px, 0px) rotate(0deg);}
+    to { transform: translate(200px, 200px) rotate(360deg);}
 }
 
 /* ---------- FIRST SCREEN ---------- */
@@ -23,115 +34,3 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-h1 {
-    color: #d63384;
-    font-size: 38px;
-    margin-bottom: 60px;
-}
-
-.buttons {
-    position: relative;
-    width: 420px;
-    height: 120px;
-}
-
-button {
-    padding: 15px 40px;
-    font-size: 22px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    position: absolute;
-}
-
-#yes {
-    right: 0;
-    background: #ff4d6d;
-    color: white;
-}
-
-#no {
-    left: 0;
-    background: #adb5bd;
-}
-
-/* ---------- LOVE SCREEN ---------- */
-.love-screen {
-    display: none;
-    position: relative;
-    z-index: 2;
-    height: 100vh;
-    background: #ffd6e8;
-    justify-content: center;
-    align-items: center;
-}
-
-.love-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.big-heart {
-    font-size: 300px;
-    color: rgba(255, 77, 109, 0.35);
-    position: absolute;
-    z-index: 2;
-}
-
-.love-text {
-    font-size: 90px;
-    font-weight: bold;
-    color: #d63384;
-    z-index: 3;
-    text-align: center;
-}
-
-/* ---------- ROSES BACKGROUND ---------- */
-.roses {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.rose {
-    position: absolute;
-    font-size: 100px;
-    opacity: 0.3;
-}
-
-/* ---------- RAINING HEARTS ---------- */
-.rain-heart {
-    position: absolute;
-    top: -50px;
-    font-size: 35px;
-    animation: fall 5s linear forwards;
-}
-
-@keyframes fall {
-    to {
-        transform: translateY(110vh);
-        opacity: 0;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<!-- First Screen -->
-<div class="container" id="start">
-    <h1>Will you be my Valentine?</h1>
-    <div class="buttons">
-        <button id="no" onmouseover="moveNo()" onclick="moveNo()">NO</button>
-        <button id="yes" onclick="showLove()">YES</button>
-    </div>
-</div>
-
-<!-- Secon
