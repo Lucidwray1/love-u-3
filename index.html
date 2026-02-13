@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +11,21 @@ body {
     height: 100vh;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    background-image: url("hearts-bg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #ffd6e8;
+}
+
+/* ---------- FLOATING BACKGROUND HEARTS ---------- */
+.bg-heart {
+    position: absolute;
+    font-size: 80px;
+    color: rgba(255, 77, 109, 0.5);
+    pointer-events: none;
+    animation: drift linear infinite;
+}
+
+@keyframes drift {
+    from { transform: translate(0px, 0px) rotate(0deg);}
+    to { transform: translate(200px, 200px) rotate(360deg);}
 }
 
 /* ---------- FIRST SCREEN ---------- */
@@ -29,7 +41,7 @@ body {
 
 h1 {
     color: #d63384;
-    font-size: 38px;
+    font-size: 42px;
     margin-bottom: 60px;
 }
 
@@ -63,9 +75,7 @@ button {
 .love-screen {
     display: none;
     position: relative;
-    z-index: 2;
     height: 100vh;
-    background: #ffd6e8;
     justify-content: center;
     align-items: center;
 }
@@ -78,7 +88,7 @@ button {
 }
 
 .big-heart {
-    font-size: 750px; /* doubled from 500px */
+    font-size: 1000px; /* doubled in size */
     color: rgba(255, 77, 109, 0.35);
     position: absolute;
     z-index: 1;
@@ -90,11 +100,11 @@ button {
 }
 
 .love-text {
-    font-size: 90px;
+    font-size: 70px;
     font-weight: bold;
     color: #d63384;
-    z-index: 3;
-    text-align: center;
+    z-index: 2;
+    max-width: 400px;
 }
 
 /* ---------- ROSES BACKGROUND ---------- */
@@ -110,8 +120,14 @@ button {
     font-size: 100px;
     opacity: 0.3;
 }
-/* ---------- RAINING HEARTS ---------- */
 
+/* ---------- RAINING HEARTS ---------- */
+.rain-heart {
+    position: absolute;
+    top: -50px;
+    font-size: 35px;
+    animation: fall 5s linear forwards;
+}
 
 @keyframes fall {
     to {
@@ -124,7 +140,10 @@ button {
 
 <body>
 
-<!-- First Screen -->
+<!-- BACKGROUND HEARTS -->
+<div id="bg-hearts"></div>
+
+<!-- FIRST SCREEN -->
 <div class="container" id="start">
     <h1>Will you be my Valentine?</h1>
     <div class="buttons">
@@ -133,7 +152,7 @@ button {
     </div>
 </div>
 
-<!-- Second Screen -->
+<!-- SECOND SCREEN -->
 <div class="love-screen" id="love">
     <div class="roses" id="roses"></div>
     <div class="love-wrapper">
@@ -143,43 +162,107 @@ button {
 </div>
 
 <script>
-/* ---------- MOVE NO BUTTON ---------- */
-function moveNo() {
-    const no = document.getElementById("no");
-    const x = Math.random() * (window.innerWidth - no.offsetWidth);
-    const y = Math.random() * (window.innerHeight - no.offsetHeight);
-    no.style.left = x + "px";
-    no.style.top = y + "px";
+/* ---------- CREATE RANDOM FLOATING HEARTS ---------- */
+const numHearts = 15;
+const bgHearts = document.getElementById("bg-hearts");
+
+for(let i=0;i<numHearts;i++){
+    const heart = document.createElement("div");
+    heart.className = "bg-heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = Math.random() * window.innerHeight + "px";
+    heart.style.fontSize = 80 + Math.random() * 80 + "px";
+    const duration = 30 + Math.random() * 50;
+    heart.style.animationDuration = duration + "s";
+    bgHearts.appendChild(heart);
 }
 
-/* ---------- YES CLICK ---------- */
-function showLove() {
-    // Hide first screen
-    document.getElementById("start").style.display = "none";
+/* ---------- MOVE NO BUTTON SLIGHTLY WITHOUT LEAVING SCREEN ---------- */
+function moveNo() {
+    const no = document.getElementById("no");
+    const btnWidth = no.offsetWidth;
+    const btnHeight = no.offsetHeight;
+    const maxX = window.innerWidth - btnWidth;
+    const maxY = window.innerHeight - btnHeight;
 
-    // Show LOVE screen
+    // Get current position
+    let currentX = parseFloat(no.style.left) || 0;
+    let currentY = parseFloat(no.style.top) || 0;
+
+    // Move a small random distance (-50 to 50)
+    let dx = (Math.random() - 0.5) * 100; 
+    let dy = (Math.random() - 0.5) * 100;
+
+    let newX = currentX + dx;
+    let newY = currentY + dy;
+
+    // Clamp to screen edges
+    if (newX < 0) newX = 0;
+    if (newX > maxX) newX = maxX;
+    if (newY < 0) newY = 0;
+    if (newY > maxY) newY = maxY;
+
+    no.style.left = newX + "px";
+    no.style.top = newY + "px";
+}
+
+/* ---------- SHOW LOVE SCREEN ---------- */
+function showLove(){
+    document.getElementById("start").style.display = "none";
+    document.getElementById("bg-hearts").style.display = "none";
+
     const love = document.getElementById("love");
     love.style.display = "flex";
 
-    // Add roses background
-    for (let i = 0; i < 10; i++) {
+    // Add roses with random velocity
+    const rosesArray = [];
+    for(let i=0;i<10;i++){
         const r = document.createElement("div");
         r.className = "rose";
         r.innerHTML = "🌹";
-        r.style.left = Math.random() * 100 + "vw";
-        r.style.top = Math.random() * 100 + "vh";
+        r.style.left = Math.random() * window.innerWidth + "px";
+        r.style.top = Math.random() * window.innerHeight + "px";
+
+        r.vx = (Math.random() - 0.5) * 0.3; // horizontal speed
+        r.vy = (Math.random() - 0.5) * 0.3; // vertical speed
+
         document.getElementById("roses").appendChild(r);
+        rosesArray.push(r);
     }
 
+    // Animate roses
+    function animateRoses(){
+        rosesArray.forEach(r => {
+            let x = parseFloat(r.style.left);
+            let y = parseFloat(r.style.top);
+
+            x += r.vx;
+            y += r.vy;
+
+            // Wrap around screen edges
+            if (x > window.innerWidth) x = -50;
+            if (x < -50) x = window.innerWidth;
+            if (y > window.innerHeight) y = -50;
+            if (y < -50) y = window.innerHeight;
+
+            r.style.left = x + "px";
+            r.style.top = y + "px";
+        });
+        requestAnimationFrame(animateRoses);
+    }
+
+    animateRoses();
+
     // Raining hearts
-    setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "rain-heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * 100 + "vw";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
-    }, 180);
+    setInterval(()=>{
+        const h = document.createElement("div");
+        h.className = "rain-heart";
+        h.innerHTML = "❤️";
+        h.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(h);
+        setTimeout(()=> h.remove(), 5000);
+    },180);
 }
 </script>
 
