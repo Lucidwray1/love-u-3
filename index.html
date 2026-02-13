@@ -99,7 +99,27 @@ button {
     color: #d63384;
     z-index: 3;
 }
+.love-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.big-heart {
+    font-size: 300px;
+    color: rgba(255, 77, 109, 0.35);
+    position: absolute;
+    z-index: 2;
+}
+
+.love-text {
+    font-size: 90px;
+    font-weight: bold;
+    color: #d63384;
+    z-index: 3;
+    text-align: center;
+}
 /* ---------- ROSES BACKGROUND ---------- */
 .roses {
     position: fixed;
@@ -144,7 +164,11 @@ button {
     </div>
 </div>
 
-<div class="love-screen" id="love">
+<div class="love-wrapper">
+    <div class="big-heart">❤️</div>
+    <div class="love-text">I LOVE YOU</div>
+</div>
+
     <div class="roses" id="roses"></div>
     <div class="love-text">I LOVE YOU</div>
 </div>
@@ -202,4 +226,5 @@ function showLove() {
 
 </body>
 </html>
+
 
