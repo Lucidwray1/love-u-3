@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #ffd6e8;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+/* ---------- FLOATING BACKGROUND HEARTS ---------- */
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-heart {
+    position: absolute;
+    font-size: 120px;
+    color: rgba(255, 255, 255, 0.35);
+    animation: drift 40s linear infinite;
+}
+
+@keyframes drift {
+    from { transform: translate(0,0); }
+    to { transform: translate(200px, -200px); }
+}
+
+/* ---------- FIRST SCREEN ---------- */
+.container {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: #d63384;
+    font-size: 38px;
+    margin-bottom: 60px;
+}
+
+.buttons {
+    position: relative;
+    width: 420px;
+    height: 120px;
+}
+
+button {
+    padding: 15px 40px;
+    font-size: 22px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    position: absolute;
+}
+
+#yes {
+    right: 0;
+    background: #ff4d6d;
+    color: white;
+}
+
+#no {
+    left: 0;
+    background: #adb5bd;
+}
+
+/* ---------- LOVE SCREEN ---------- */
+.love-screen {
+    display: none;
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    background: #ffd6e8;
+    justify-content: center;
+    align-items: center;
+}
+
+.love-text {
+    font-size: 90px;
+    font-weight: bold;
+    color: #d63384;
+    z-index: 3;
+}
+
+/* ---------- ROSES BACKGROUND ---------- */
+.roses {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.rose {
+    position: absolute;
+    font-size: 100px;
+    opacity: 0.3;
+}
+
+/* ---------- RAINING HEARTS ---------- */
+.rain-heart {
+    position: absolute;
+    top: -50px;
+    font-size: 35px;
+    animation: fall 5s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg" id="bg"></div>
+
+<div class="container" id="start">
+    <h1>Will you be my Valentine?</h1>
+
+    <div class="buttons">
+        <button id="no" onmouseover="moveNo()" onclick="moveNo()">NO</button>
+        <button id="yes" onclick="showLove()">YES</button>
+    </div>
+</div>
+
+<div class="love-screen" id="love">
+    <div class="roses" id="roses"></div>
+    <div class="love-text">I LOVE YOU</div>
+</div>
+
+<script>
+/* ---------- CREATE BACKGROUND HEARTS ---------- */
+for (let i = 0; i < 12; i++) {
+    const h = document.createElement("div");
+    h.className = "bg-heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.top = Math.random() * 100 + "vh";
+    h.style.animationDuration = 30 + Math.random() * 40 + "s";
+    document.getElementById("bg").appendChild(h);
+}
+
+/* ---------- MOVE NO BUTTON ---------- */
+function moveNo() {
+    const no = document.getElementById("no");
+    const x = Math.random() * (window.innerWidth - no.offsetWidth);
+    const y = Math.random() * (window.innerHeight - no.offsetHeight);
+    no.style.left = x + "px";
+    no.style.top = y + "px";
+}
+
+/* ---------- YES CLICK ---------- */
+function showLove() {
+    document.getElementById("start").style.display = "none";
+    document.getElementById("bg").style.display = "none";
+
+    const love = document.getElementById("love");
+    love.style.display = "flex";
+
+    /* Roses */
+    for (let i = 0; i < 10; i++) {
+        const r = document.createElement("div");
+        r.className = "rose";
+        r.innerHTML = "🌹";
+        r.style.left = Math.random() * 100 + "vw";
+        r.style.top = Math.random() * 100 + "vh";
+        document.getElementById("roses").appendChild(r);
+    }
+
+    /* Raining hearts */
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "rain-heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 180);
+}
+</script>
+
+</body>
+</html>
